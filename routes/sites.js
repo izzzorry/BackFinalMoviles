@@ -1,13 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const Site = require('../models/Site');
-const City = require('../models/City');
+const Site = require('../models/Sitios');
 const auth = require('../middleware/auth');
 
 // Obtener todos los sitios
 router.get('/', async (req, res) => {
   try {
-    const sites = await Site.find().populate('cityId');
+    const sites = await Site.find().populate('ciudadId', 'nombre');
     res.json(sites);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -16,13 +15,14 @@ router.get('/', async (req, res) => {
 
 // Crear un sitio (solo admin)
 router.post('/', auth, async (req, res) => {
-  if (req.user.role !== 'Admin') return res.status(403).json({ message: 'No autorizado' });
+  if (req.user.perfil !== 'Admin') return res.status(403).json({ message: 'No autorizado' });
 
   const site = new Site({
-    name: req.body.name,
-    cityId: req.body.cityId,
-    type: req.body.type,
-    description: req.body.description
+    nombre: req.body.nombre,
+    ciudadId: req.body.ciudadId,
+    tipo: req.body.tipo,
+    geoposicion: req.body.geoposicion,
+    imageUrl: req.body.imageUrl
   });
 
   try {

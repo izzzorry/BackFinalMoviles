@@ -1,14 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const Visit = require('../models/Visit');
+const Visit = require('../models/Visitas');
 const auth = require('../middleware/auth');
 
 // Obtener todas las visitas
 router.get('/', auth, async (req, res) => {
   try {
     const visits = await Visit.find()
-      .populate('userId')
-      .populate('siteId');
+      .populate('usuarioId')
+      .populate('sitioId');
     res.json(visits);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -17,13 +17,17 @@ router.get('/', auth, async (req, res) => {
 
 // Registrar una visita
 router.post('/', auth, async (req, res) => {
-  const visit = new Visit({
-    userId: req.user.userId,
-    siteId: req.body.siteId,
-    visitDate: new Date()
-  });
-
   try {
+    if (!req.body.sitioId) {
+      return res.status(400).json({ message: 'Falta sitioId' });
+    }
+
+    const visit = new Visit({
+      usuarioId: req.user.userId,
+      sitioId: req.body.sitioId,
+      visitaDate: new Date()
+    });
+
     const newVisit = await visit.save();
     res.status(201).json(newVisit);
   } catch (err) {

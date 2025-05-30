@@ -1,30 +1,33 @@
 const express = require('express');
 const router = express.Router();
-const Country = require('../models/Pais');
+const MenuSitio = require('../models/Menu_sitio');
 const auth = require('../middleware/auth');
 
-// Obtener todos los países
+// Obtener todos los menús de sitios
 router.get('/', async (req, res) => {
   try {
-    const countries = await Country.find();
-    res.json(countries);
+    const menus = await MenuSitio.find()
+      .populate('sitioId', 'nombre tipo')
+      .populate('platoId', 'nombre categoria');
+    res.json(menus);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 });
 
-// Crear un país (solo admin)
+// Crear un menú para un sitio (solo admin)
 router.post('/', auth, async (req, res) => {
   if (req.user.perfil !== 'Admin') return res.status(403).json({ message: 'No autorizado' });
 
-  const country = new Country({
-    nombre: req.body.nombre,
-    codigo: req.body.codigo
+  const menu = new MenuSitio({
+    sitioId: req.body.sitioId,
+    platoId: req.body.platoId,
+    valorPlato: req.body.valorPlato
   });
 
   try {
-    const newCountry = await country.save();
-    res.status(201).json(newCountry);
+    const newMenu = await menu.save();
+    res.status(201).json(newMenu);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }

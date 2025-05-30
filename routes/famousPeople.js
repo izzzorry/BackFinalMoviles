@@ -1,13 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const FamousPerson = require('../models/FamousPerson');
-const City = require('../models/City');
+const FamousPerson = require('../models/Famosos');
 const auth = require('../middleware/auth');
 
 // Obtener todas las personas famosas
 router.get('/', async (req, res) => {
   try {
-    const famousPeople = await FamousPerson.find().populate('cityId');
+    const famousPeople = await FamousPerson.find()
+      .populate('ciudadNacimientoId', 'nombre'); // Solo el nombre de la ciudad
     res.json(famousPeople);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -16,13 +16,13 @@ router.get('/', async (req, res) => {
 
 // Crear una persona famosa (solo admin)
 router.post('/', auth, async (req, res) => {
-  if (req.user.role !== 'Admin') return res.status(403).json({ message: 'No autorizado' });
+  if (req.user.perfil !== 'Admin') return res.status(403).json({ message: 'No autorizado' });
 
   const famousPerson = new FamousPerson({
-    name: req.body.name,
-    cityId: req.body.cityId,
-    category: req.body.category,
-    description: req.body.description
+    nombre: req.body.nombre,
+    ciudadNacimientoId: req.body.ciudadNacimientoId,
+    categoria: req.body.categoria,
+    imageUrl: req.body.imageUrl
   });
 
   try {

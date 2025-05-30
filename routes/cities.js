@@ -1,13 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const City = require('../models/City');
-const Country = require('../models/Country');
+const City = require('../models/Ciudad');
 const auth = require('../middleware/auth');
 
 // Obtener todas las ciudades
 router.get('/', async (req, res) => {
   try {
-    const cities = await City.find().populate('countryId');
+    const cities = await City.find().populate('paisId', 'nombre codigo');
     res.json(cities);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -16,12 +15,12 @@ router.get('/', async (req, res) => {
 
 // Crear una ciudad (solo admin)
 router.post('/', auth, async (req, res) => {
-  if (req.user.role !== 'Admin') return res.status(403).json({ message: 'No autorizado' });
+  if (req.user.perfil !== 'Admin') return res.status(403).json({ message: 'No autorizado' });
 
   const city = new City({
-    name: req.body.name,
-    countryId: req.body.countryId,
-    population: req.body.population
+    nombre: req.body.nombre,
+    paisId: req.body.paisId,
+    imageUrl: req.body.imageUrl
   });
 
   try {
