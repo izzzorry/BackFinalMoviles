@@ -56,4 +56,19 @@ router.get('/por-pais/:paisId', async (req, res) => {
   }
 });
 
+// ----- NUEVA RUTA: Obtener un sitio por su ID -----
+router.get('/:sitioId', async (req, res) => {
+  try {
+    const sitio = await Site.findById(req.params.sitioId)
+      .populate('ciudad_id', 'nombre');
+    if (!sitio) {
+      return res.status(404).json({ message: 'Sitio no encontrado' });
+    }
+    res.json(sitio);
+  } catch (err) {
+    console.error('Error en GET /api/sites/:sitioId →', err.message);
+    res.status(500).json({ message: err.message });
+  }
+});
+
 module.exports = router;
