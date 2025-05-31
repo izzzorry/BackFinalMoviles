@@ -34,6 +34,20 @@ router.get('/', auth, async (req, res) => {
   }
 });
 
+router.get('/por-usuario/:userId', auth, async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    // Buscar todos los tags cuyo campo userId coincida
+    const tags = await Tag.find({ userId: userId })
+      .populate('userId', 'nombre email perfil')
+      .populate('famousPersonId', 'nombre categoria')
+      .populate('siteId', 'nombre geoposicion');
+    res.json(tags);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 // Registrar un tag CON FOTO
 // Usamos upload.single('photo') para procesar el campo "photo" del formulario
 router.post('/', auth, upload.single('photo'), async (req, res) => {
