@@ -4,7 +4,10 @@ const sitioSchema = new mongoose.Schema({
   nombre: { type: String, required: true },
   ciudad_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Ciudad', required: true },
   tipo: { type: String, required: true },
-  geoposicion: { type: String, required: false },
+  geoposicion: {
+    latitude: { type: Number, required: true },
+    longitude: { type: Number, required: true }
+  },
   imageUrl: { type: String, required: false }
 });
 
