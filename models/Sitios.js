@@ -1,14 +1,11 @@
 const mongoose = require('mongoose');
 
-const sitiosSchema = new mongoose.Schema({
+const sitioSchema = new mongoose.Schema({
   nombre: { type: String, required: true },
-  ciudadId: { type: mongoose.Schema.Types.ObjectId, ref: 'Ciudad', required: true },
-  tipo: { type: String, required: true }, // Ej: "Iglesia", "Estadio", "Museo"
-  geoposicion: {
-    latitude: { type: Number, required: true },
-    longitude: { type: Number, required: true }
-  },
+  ciudad_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Ciudad', required: true },
+  tipo: { type: String, required: true },
+  geoposicion: { type: String, required: false },
   imageUrl: { type: String, required: false }
 });
 
-module.exports = mongoose.model('Sitios', sitiosSchema);
+module.exports = mongoose.model('Sitio', sitioSchema);
