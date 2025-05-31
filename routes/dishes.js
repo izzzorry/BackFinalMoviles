@@ -31,4 +31,16 @@ router.post('/', auth, async (req, res) => {
   }
 });
 
+// Obtener platos por ciudad
+router.get('/dishes-by-city/:cityId', async (req, res) => {
+  try {
+    const cityId = req.params.cityId;
+
+    const dishes = await Dish.find({ ciudadId: cityId }).populate('ciudadId', 'nombre');
+    res.json(dishes);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 module.exports = router;

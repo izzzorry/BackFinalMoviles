@@ -20,6 +20,7 @@ app.use('/api/sites', require('./routes/sites'));
 app.use('/api/dishes', require('./routes/dishes'));
 app.use('/api/visits', require('./routes/visits'));
 app.use('/api/tags', require('./routes/tags'));
+app.use('/api/menu_sitios', require('./routes/menu_sitios'));
 
 // Conexión a MongoDB
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
