@@ -27,6 +27,7 @@ app.use('/api/dishes', require('./routes/dishes'));
 app.use('/api/visits', require('./routes/visits'));
 app.use('/api/tags', require('./routes/tags'));                 // aquí procesa tags con multer
 app.use('/api/menu_sitios', require('./routes/menu_sitios'));
+app.use('/api/queries', require('./routes/queries'));
 
 // Conexión a MongoDB
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
