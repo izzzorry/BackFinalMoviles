@@ -44,4 +44,33 @@ router.post('/', auth, async (req, res) => {
   }
 });
 
+router.put('/:id', auth, async (req, res) => {
+  if (req.user.perfil !== 'Admin') return res.status(403).json({ message: 'No autorizado' });
+
+  try {
+    const updatedCity = await City.findByIdAndUpdate(
+      req.params.id,
+      {
+        nombre: req.body.nombre,
+        imageUrl: req.body.imageUrl
+      },
+      { new: true }
+    );
+    res.json(updatedCity);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
+
+router.delete('/:id', auth, async (req, res) => {
+  if (req.user.perfil !== 'Admin') return res.status(403).json({ message: 'No autorizado' });
+
+  try {
+    await City.findByIdAndDelete(req.params.id);
+    res.json({ message: 'Ciudad eliminada correctamente' });
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
 module.exports = router;
