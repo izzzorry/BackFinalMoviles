@@ -9,7 +9,7 @@ const Ciudad = require('../models/Ciudad');
 router.get('/', async (req, res) => {
   try {
     const famousPeople = await FamousPerson.find()
-      .populate('ciudadNacimientoId', 'nombre'); // Solo el nombre de la ciudad
+      .populate('ciudad_nacimiento_id', 'nombre'); // Solo el nombre de la ciudad
     res.json(famousPeople);
   } catch (err) {
     res.status(500).json({ message: err.message });
